@@ -1,0 +1,23 @@
+#!/bin/sh
+
+archs='i386 i486 i586 pentium pentium-mmx pentiumpro i686 pentium2 pentium3 pentium3m pentium-m pentium4 pentium4m prescott nocona core2 nehalem westmere sandybridge ivybridge haswell broadwell bonnell silvermont knl k6 k6-2 k6-3 athlon athlon-tbird athlon-4 athlon-xp athlon-mp k8 opteron athlon64 athlon-fx k8-sse3 opteron-sse3 athlon64-sse3 amdfam10 barcelona bdver1 bdver2 bdver3 bdver4 btver1 btver2 winchip-c6 winchip2 c3 c3-2 geode'
+
+dryes() {
+	local sum=0 res=0
+	for i in $(seq 1 $1); do
+		res=$(schedtool -F -p 99 -n -19 -a 0x1 -e ./dry 2>/dev/null |awk '/^Dhrystones/{print$4}')
+		sum=$((sum + res))
+	done
+	echo -n $((sum / $1))
+}
+
+echo 'CPU,32 bit,64 bit'
+for a in $archs; do
+	echo -n "$a"
+	for b in 32 64; do
+		echo -n ,
+		make -s clean all CFLAGS="-m$b -mfpmath=sse -O3 -march=$a" >/dev/null 2>/dev/null || continue
+		dryes 5
+	done
+	echo
+done
