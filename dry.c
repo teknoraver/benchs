@@ -482,8 +482,8 @@ int main (int argc, char *argv[])
   /* main program, corresponds to procedures        */
   /* Main and Proc_0 in the Ada version             */
 {
-        One_Fifty       Int_1_Loc;
-  REG   One_Fifty       Int_2_Loc;
+        One_Fifty       Int_1_Loc = 0;
+  REG   One_Fifty       Int_2_Loc = 0;
         One_Fifty       Int_3_Loc;
   REG   char            Ch_Index;
         Enumeration     Enum_Loc;
