@@ -357,14 +357,14 @@
 #include <sched.h>
 
 /* Use gettimeofday(), courtesy of Broadcom ;) */
-#include <sys/time.h>
-#define CLOCK_TYPE "gettimeofday()"
+#include <time.h>
+#define CLOCK_TYPE "clock_gettime()"
 #undef HZ
 #define HZ	(1000) /* time() returns time in seconds */
-struct timeval ttmp;
+struct timespec ttmp;
 #define Too_Small_Time 2*HZ /* Measurements should last at least 2 seconds */
-#define Start_Timer() gettimeofday(&ttmp, NULL); Begin_Time = (unsigned int)ttmp.tv_sec*1000 + (unsigned int)ttmp.tv_usec/1000
-#define Stop_Timer()  gettimeofday(&ttmp, NULL); End_Time   = (unsigned int)ttmp.tv_sec*1000 + (unsigned int)ttmp.tv_usec/1000
+#define Start_Timer() clock_gettime(CLOCK_MONOTONIC, &ttmp); Begin_Time = (unsigned int)ttmp.tv_sec*1000 + (unsigned int)ttmp.tv_nsec/1000000
+#define Stop_Timer()  clock_gettime(CLOCK_MONOTONIC, &ttmp); End_Time   = (unsigned int)ttmp.tv_sec*1000 + (unsigned int)ttmp.tv_nsec/1000000
 
 #define Mic_secs_Per_Second     1000000.0
 #define NUMBER_OF_RUNS		50000 /* Default number of runs */
