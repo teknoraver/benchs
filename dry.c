@@ -474,6 +474,12 @@ void Proc_8(Arr_1_Dim, Arr_2_Dim, int, int);
 
 #define bprintf(...) if(!batch) printf(__VA_ARGS__)
 
+void usage(char *argv0, int ret)
+{
+     fprintf (stderr, "Usage: %s [-h] [-r runs] [-t] [-b]\n", argv0);
+     exit (ret);
+}
+
 int main (int argc, char *argv[])
 /*****/
 
@@ -498,7 +504,7 @@ int main (int argc, char *argv[])
   int cpus = sysconf(_SC_NPROCESSORS_ONLN);
   int batch = 0;
 
-  while((c = getopt(argc, argv, "t::r:b")) != -1) {
+  while((c = getopt(argc, argv, "t::r:bh")) != -1) {
     switch(c) {
     case 'b':
       batch = 1;
@@ -509,14 +515,16 @@ int main (int argc, char *argv[])
     case 'r':
       Number_Of_Runs = atoi(optarg);
       break;
+    case 'h':
+      usage(*argv, 0);
+      break;
     }
   }
 
   /* Arguments */
   if(optind != argc)
   {
-     printf ("Usage: %s [-r runs] [-t] [-b]\n", argv[0]);
-     exit (1);
+    usage(*argv, 1);
   }
 
   /* Initializations */
