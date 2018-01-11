@@ -473,6 +473,7 @@ void Proc_7(One_Fifty, One_Fifty, One_Fifty *);
 void Proc_8(Arr_1_Dim, Arr_2_Dim, int, int);
 
 #define bprintf(...) if(!batch) printf(__VA_ARGS__)
+#define ebprintf(...) if(!batch) fprintf(stderr, __VA_ARGS__)
 
 void usage(char *argv0, int ret)
 {
@@ -495,7 +496,6 @@ int main (int argc, char *argv[])
         Str_30          Str_2_Loc;
   REG   int             Run_Index;
   REG   int             Number_Of_Runs = NUMBER_OF_RUNS;
-  char buf[4096];
   int nthreads = 1;
 
   int c;
@@ -546,7 +546,6 @@ int main (int argc, char *argv[])
         /* Warning: With 16-Bit processors and Number_Of_Runs > 32000,  */
         /* overflow may occur for this array element.                   */
 
-  bprintf ("\n");
   bprintf ("Dhrystone Benchmark, Version %s\n", Version);
   if (Reg)
   {
@@ -584,7 +583,7 @@ int main (int argc, char *argv[])
   }
   while (!Done) {
 
-    bprintf ("Trying %d runs through Dhrystone:\n", Number_Of_Runs);
+    ebprintf ("Trying %d runs through Dhrystone:\n", Number_Of_Runs);
 
     /***************/
     /* Start timer */
@@ -648,62 +647,61 @@ int main (int argc, char *argv[])
 
     if (User_Time < Too_Small_Time)
     {
-      bprintf ("Measured time too small to obtain meaningful results\n");
+      ebprintf ("Measured time too small to obtain meaningful results\n\n");
       Number_Of_Runs = Number_Of_Runs * 10;
-      bprintf ("\n");
     } else Done = true;
   }
 
-  sprintf(buf, "Final values of the variables used in the benchmark:\n");
-  sprintf(buf, "\n");
-  sprintf(buf, "Int_Glob:            %d\n", Int_Glob);
-  sprintf(buf, "        should be:   %d\n", 5);
-  sprintf(buf, "Bool_Glob:           %d\n", Bool_Glob);
-  sprintf(buf, "        should be:   %d\n", 1);
-  sprintf(buf, "Ch_1_Glob:           %c\n", Ch_1_Glob);
-  sprintf(buf, "        should be:   %c\n", 'A');
-  sprintf(buf, "Ch_2_Glob:           %c\n", Ch_2_Glob);
-  sprintf(buf, "        should be:   %c\n", 'B');
-  sprintf(buf, "Arr_1_Glob[8]:       %d\n", Arr_1_Glob[8]);
-  sprintf(buf, "        should be:   %d\n", 7);
-  sprintf(buf, "Arr_2_Glob[8][7]:    %d\n", Arr_2_Glob[8][7]);
-  sprintf(buf, "        should be:   Number_Of_Runs + 10\n");
-  sprintf(buf, "Ptr_Glob->\n");
-  sprintf(buf, "  Ptr_Comp:          %p\n", Ptr_Glob->Ptr_Comp);
-  sprintf(buf, "        should be:   (implementation-dependent)\n");
-  sprintf(buf, "  Discr:             %d\n", Ptr_Glob->Discr);
-  sprintf(buf, "        should be:   %d\n", 0);
-  sprintf(buf, "  Enum_Comp:         %d\n", Ptr_Glob->variant.var_1.Enum_Comp);
-  sprintf(buf, "        should be:   %d\n", 2);
-  sprintf(buf, "  Int_Comp:          %d\n", Ptr_Glob->variant.var_1.Int_Comp);
-  sprintf(buf, "        should be:   %d\n", 17);
-  sprintf(buf, "  Str_Comp:          %s\n", Ptr_Glob->variant.var_1.Str_Comp);
-  sprintf(buf, "        should be:   DHRYSTONE PROGRAM, SOME STRING\n");
-  sprintf(buf, "Next_Ptr_Glob->\n");
-  sprintf(buf, "  Ptr_Comp:          %p\n", Next_Ptr_Glob->Ptr_Comp);
-  sprintf(buf, "        should be:   (implementation-dependent), same as above\n");
-  sprintf(buf, "  Discr:             %d\n", Next_Ptr_Glob->Discr);
-  sprintf(buf, "        should be:   %d\n", 0);
-  sprintf(buf, "  Enum_Comp:         %d\n", Next_Ptr_Glob->variant.var_1.Enum_Comp);
-  sprintf(buf, "        should be:   %d\n", 1);
-  sprintf(buf, "  Int_Comp:          %d\n", Next_Ptr_Glob->variant.var_1.Int_Comp);
-  sprintf(buf, "        should be:   %d\n", 18);
-  sprintf(buf, "  Str_Comp:          %s\n",
+  ebprintf("Final values of the variables used in the benchmark:\n");
+  ebprintf("\n");
+  ebprintf("Int_Glob:            %d\n", Int_Glob);
+  ebprintf("        should be:   %d\n", 5);
+  ebprintf("Bool_Glob:           %d\n", Bool_Glob);
+  ebprintf("        should be:   %d\n", 1);
+  ebprintf("Ch_1_Glob:           %c\n", Ch_1_Glob);
+  ebprintf("        should be:   %c\n", 'A');
+  ebprintf("Ch_2_Glob:           %c\n", Ch_2_Glob);
+  ebprintf("        should be:   %c\n", 'B');
+  ebprintf("Arr_1_Glob[8]:       %d\n", Arr_1_Glob[8]);
+  ebprintf("        should be:   %d\n", 7);
+  ebprintf("Arr_2_Glob[8][7]:    %d\n", Arr_2_Glob[8][7]);
+  ebprintf("        should be:   Number_Of_Runs + 10\n");
+  ebprintf("Ptr_Glob->\n");
+  ebprintf("  Ptr_Comp:          %p\n", Ptr_Glob->Ptr_Comp);
+  ebprintf("        should be:   (implementation-dependent)\n");
+  ebprintf("  Discr:             %d\n", Ptr_Glob->Discr);
+  ebprintf("        should be:   %d\n", 0);
+  ebprintf("  Enum_Comp:         %d\n", Ptr_Glob->variant.var_1.Enum_Comp);
+  ebprintf("        should be:   %d\n", 2);
+  ebprintf("  Int_Comp:          %d\n", Ptr_Glob->variant.var_1.Int_Comp);
+  ebprintf("        should be:   %d\n", 17);
+  ebprintf("  Str_Comp:          %s\n", Ptr_Glob->variant.var_1.Str_Comp);
+  ebprintf("        should be:   DHRYSTONE PROGRAM, SOME STRING\n");
+  ebprintf("Next_Ptr_Glob->\n");
+  ebprintf("  Ptr_Comp:          %p\n", Next_Ptr_Glob->Ptr_Comp);
+  ebprintf("        should be:   (implementation-dependent), same as above\n");
+  ebprintf("  Discr:             %d\n", Next_Ptr_Glob->Discr);
+  ebprintf("        should be:   %d\n", 0);
+  ebprintf("  Enum_Comp:         %d\n", Next_Ptr_Glob->variant.var_1.Enum_Comp);
+  ebprintf("        should be:   %d\n", 1);
+  ebprintf("  Int_Comp:          %d\n", Next_Ptr_Glob->variant.var_1.Int_Comp);
+  ebprintf("        should be:   %d\n", 18);
+  ebprintf("  Str_Comp:          %s\n",
                                 Next_Ptr_Glob->variant.var_1.Str_Comp);
-  sprintf(buf, "        should be:   DHRYSTONE PROGRAM, SOME STRING\n");
-  sprintf(buf, "Int_1_Loc:           %d\n", Int_1_Loc);
-  sprintf(buf, "        should be:   %d\n", 5);
-  sprintf(buf, "Int_2_Loc:           %d\n", Int_2_Loc);
-  sprintf(buf, "        should be:   %d\n", 13);
-  sprintf(buf, "Int_3_Loc:           %d\n", Int_3_Loc);
-  sprintf(buf, "        should be:   %d\n", 7);
-  sprintf(buf, "Enum_Loc:            %d\n", Enum_Loc);
-  sprintf(buf, "        should be:   %d\n", 1);
-  sprintf(buf, "Str_1_Loc:           %s\n", Str_1_Loc);
-  sprintf(buf, "        should be:   DHRYSTONE PROGRAM, 1'ST STRING\n");
-  sprintf(buf, "Str_2_Loc:           %s\n", Str_2_Loc);
-  sprintf(buf, "        should be:   DHRYSTONE PROGRAM, 2'ND STRING\n");
-  sprintf(buf, "\n");
+  ebprintf("        should be:   DHRYSTONE PROGRAM, SOME STRING\n");
+  ebprintf("Int_1_Loc:           %d\n", Int_1_Loc);
+  ebprintf("        should be:   %d\n", 5);
+  ebprintf("Int_2_Loc:           %d\n", Int_2_Loc);
+  ebprintf("        should be:   %d\n", 13);
+  ebprintf("Int_3_Loc:           %d\n", Int_3_Loc);
+  ebprintf("        should be:   %d\n", 7);
+  ebprintf("Enum_Loc:            %d\n", Enum_Loc);
+  ebprintf("        should be:   %d\n", 1);
+  ebprintf("Str_1_Loc:           %s\n", Str_1_Loc);
+  ebprintf("        should be:   DHRYSTONE PROGRAM, 1'ST STRING\n");
+  ebprintf("Str_2_Loc:           %s\n", Str_2_Loc);
+  ebprintf("        should be:   DHRYSTONE PROGRAM, 2'ND STRING\n");
+  ebprintf("\n");
 
 
     Microseconds = (float) User_Time * Mic_secs_Per_Second 
