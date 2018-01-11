@@ -702,6 +702,8 @@ double p[];
 }
 #endif
 
+#define UNIX
+
 /*****************************************************/
 /*  UNIX dtime(). This is the preferred UNIX timer.  */
 /*  Provided by: Markku Kolkka, mk59200@cc.tut.fi    */
