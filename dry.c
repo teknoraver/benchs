@@ -572,9 +572,10 @@ int main (int argc, char *argv[])
       CPU_ZERO(&mask);
       CPU_SET(i % cpus, &mask);
       pid = fork();
-      if(!pid)
-          break;
-      sched_setaffinity(pid, sizeof(cpu_set_t), &mask);
+      if(!pid) {
+        sched_setaffinity(0, sizeof(cpu_set_t), &mask);
+        break;
+      }
     }
   if(pid) {
     int status = 0;
