@@ -1,6 +1,6 @@
 TOOLS := dry flops
 
-CFLAGS := -pipe -Ofast -Wall
+CFLAGS := -pipe -Ofast -Wall -march=native
 
 all: $(TOOLS)
 
