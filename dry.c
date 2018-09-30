@@ -348,14 +348,23 @@
 
 /* Compiler and system dependent definitions: */
 
-/* variables for time measurement: */
-#define _GNU_SOURCE
+#ifdef __linux__
+# define _GNU_SOURCE
+#endif
+
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
-#include <sched.h>
 
+#if defined(__linux__)
+# include <sched.h>
+#elif defined(__FreeBSD__)
+# include <sys/param.h>
+# include <sys/cpuset.h>
+#endif
+
+/* variables for time measurement: */
 /* Use gettimeofday(), courtesy of Broadcom ;) */
 #include <time.h>
 #define CLOCK_TYPE "clock_gettime()"
@@ -568,12 +577,20 @@ int main (int argc, char *argv[])
   Done = false;
   if(nthreads > 1)
     for(i = 0; i < nthreads; i++) {
+#if defined(__linux__)
       cpu_set_t mask;
+#elif defined(__FreeBSD__)
+      cpuset_t mask;
+#endif
       CPU_ZERO(&mask);
       CPU_SET(i % cpus, &mask);
       pid = fork();
       if(!pid) {
-        sched_setaffinity(0, sizeof(cpu_set_t), &mask);
+#if defined(__linux__)
+        sched_setaffinity(0, sizeof(mask), &mask);
+#elif defined(__FreeBSD__)
+        cpuset_setaffinity(CPU_LEVEL_CPUSET, CPU_WHICH_PID, -1, sizeof(mask), &mask);
+#endif
         break;
       }
     }
