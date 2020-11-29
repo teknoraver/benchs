@@ -361,7 +361,6 @@
 #define CLOCK_TYPE "clock_gettime()"
 #undef HZ
 #define HZ	(1000) /* time() returns time in seconds */
-struct timespec ttmp;
 #define Too_Small_Time 2*HZ /* Measurements should last at least 2 seconds */
 #define Start_Timer() clock_gettime(CLOCK_MONOTONIC, &ttmp); Begin_Time = (unsigned int)ttmp.tv_sec*1000 + (unsigned int)ttmp.tv_nsec/1000000
 #define Stop_Timer()  clock_gettime(CLOCK_MONOTONIC, &ttmp); End_Time   = (unsigned int)ttmp.tv_sec*1000 + (unsigned int)ttmp.tv_nsec/1000000
